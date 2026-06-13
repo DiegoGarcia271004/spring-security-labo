@@ -73,4 +73,9 @@ public class RoleService {
         roleRepository.deleteById(id);
     }
 
+    @Transactional
+    public Role getDefaultRole() {
+        return roleRepository.findByName("USER").orElseThrow(() -> new NotFoundException("Rol USER no existe"));
+    }
+
 }

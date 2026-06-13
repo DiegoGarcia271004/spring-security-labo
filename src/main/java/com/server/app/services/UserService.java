@@ -1,5 +1,6 @@
 package com.server.app.services;
 
+import com.server.app.dto.request.UpdatePasswordRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -44,8 +45,21 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    public User findById(Integer userId) {
+        return userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User with this ID does not exists"));
+    }
+
+    public User findByUsername(String username) {
+        return userRepository.findUserByUsername(username).orElseThrow(() -> new NotFoundException("A user with this username does not exists"));
+    }
+
     public Page<User> findAll(int page, int size, String search) {
         return userRepository.findAll(PageRequest.of(page, size), search);
+    }
+
+    public User updatePassword(User user, UpdatePasswordRequest req) {
+        user.setPassword(req.newpassword());
+        return userRepository.save(user);
     }
 
     @Transactional
